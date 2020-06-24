@@ -18,6 +18,7 @@ const rl = readline.createInterface({
 let numPlayers;
 let currentPlayer = 1; //determines what players turn it is if num === 1 player 1 turn ... num === 4 player 4 turn 
 //if num === 0 a player tonked the round is over
+var winner; //winning player
 
 
 //arrays of cards
@@ -212,7 +213,7 @@ async function howManyPlayers() {
         rl.question('How many players are there? the limit is 4 \n', players => { resolve(players) })
     })
     numPlayers = await promise1;
-    console.log("Ok so there are " + numPlayers + " players");
+    //console.log("Ok so there are " + numPlayers + " players");
 }//obtains and prints the number of players
 async function action() {
     let action;
@@ -223,12 +224,28 @@ async function action() {
 
     if (action === 'tonk') {
         currentPlayer = 0; //ends round
+        console.log("The game is over");
+        console.log("The scores are...");
+        printScores();
+        setWinner();
+        if (winner !== 'draw') {
+            console.log("The winner is " + winner);
+        } else {
+            console.log("It's a draw");
+        }
     }
     if (action === 'draw') {
         drawACard();
         console.log("");
         displayDrawnCard();
         await whatCardToSwap();
+        if (currentPlayer !== allPlayers.length) {
+            currentPlayer++;
+        }// if not last player updates the current player after a turn by adding +1
+        else if (currentPlayer === allPlayers.length) {
+            currentPlayer = 1;
+        }
+        await endTurn();
     }
 }//asks if you would like to tonk or draw
 async function whatCardToSwap() {
@@ -251,6 +268,13 @@ async function startRound() {
     makeAllPlayers(numPlayers);
     drawAllPlayersHands();
 }//initial start setup stuff for a round
+async function endTurn() {
+    let end;
+    let promise1 = new Promise((resolve) => {
+        rl.question('Your turn is now over, type end to end your turn?\n', end1 => { resolve(end1) })
+    })
+    end = await promise1;   
+}//moves the turn to the next player
 //display functions
 function displayPlayers() {
     console.log(allPlayers);
@@ -262,7 +286,7 @@ function displayDrawnCard() {
     console.log('Card drawn is ' + cardDrawn[0].name + " of " + cardDrawn[0].suit);
 }//prints the single card drawn
 function printPlayerHand(player) {
-    console.log(player.name + ' your cards are');
+    console.log(player.name + ' your cards are...');
     console.log("");
     console.log(player.hand[0].name + " of " + player.hand[0].suit);
     console.log(player.hand[1].name + " of " + player.hand[1].suit);
@@ -282,18 +306,49 @@ function displayArrayLengthInfo() {
     console.log("Discard deck length is " + discardDeck.length);
     console.log("Card drawn length is " + cardDrawn.length);
 }//prints length of allCardsInDeck, discardDeck, and cardDrawn
+function setScores() {
+    allPlayers.forEach(element => element.score = calcPlayerPossibleScore(element));
+}//calculates all player scores using calcPlayerPossibelScores(playerNames)
+function printScores() {
+    setScores();
+    allPlayers.forEach(element => console.log(element.name + " " + element.score));
+}//prints all player scores
+function setWinner() {
+    if (allPlayers.length === 4) {
+
+    }   
+    if (allPlayers.length === 3) {
+
+    }
+    if (allPlayers.length === 2) {
+        if (playerTitles[0].score > playerTitles[1].score) {
+            winner = playerTitles[0].name;
+        }
+        else if (playerTitles[1].score > playerTitles[0].score) {
+            winner = playerTitles[1].name;
+        } else {
+            winner = 'draw';
+        }
+    }
+}//declares the winner
 
 async function main() {
     await startRound();
-
-    displayUpdatedHand();
-    await action();
+    while (currentPlayer !== 0) {
+        //playerTurnStartAlert();
+        displayUpdatedHand();
+        await action();
+    }
+    
     rl.close();
 }
 //tester
 main();
 
-
+//find a way to redo questions if wrong thing is inputted (rejects);
+//find a way to set the winner (should work with two)
+//find a way to have it go an extra turn after a tonk is done 
+//find a way to show card number next to card in print hand
 
 
 
