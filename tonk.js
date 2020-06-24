@@ -1,5 +1,6 @@
 // JavaScript source code
 //tonk game
+//***Edited on MAC***
 //goal of game get 31 points or closest to 31 
 //cards must be same suit to add values together
 
@@ -253,6 +254,7 @@ async function main() {
    //await action();
     displayPlayers();
     displayAllCardsInDeckLength();
+    console.log("Edited on MAC")
     rl.close();
 }
 //tester
