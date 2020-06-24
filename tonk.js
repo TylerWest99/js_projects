@@ -226,6 +226,7 @@ async function action() {
     }
     if (action === 'draw') {
         drawACard();
+        console.log("");
         displayDrawnCard();
         await whatCardToSwap();
     }
@@ -236,13 +237,20 @@ async function whatCardToSwap() {
         rl.question('Which card in your hand would you like to swap with if any? say 1, 2, 3, or none \n', num => { resolve(num) })
     })
     card = await promise1;
-    swapACard(playerTitles[currentPlayer - 1], card-1);
+    swapACard(playerTitles[currentPlayer - 1], card - 1);
+    if (card === 'none') {
+        discardDeck.push(cardDrawn[0]); 
+        cardDrawn = [];
+    }//if card is not swapped puts cardDrawn in discard pile and empties cardDrawn
 
-    printPlayerHand(playerTitles[currentPlayer - 1]);
-    printPlayerHandValue(playerTitles[currentPlayer - 1]);//these show updated hand and score after a swap
-    console.log(playerTitles[currentPlayer - 1].hand);
-}
-
+    displayUpdatedHand();//these show updated hand and score after a swap
+}//asks what card in hand to swap with and shows updated hand and hand value
+async function startRound() {
+    makeAllCards();
+    await howManyPlayers();
+    makeAllPlayers(numPlayers);
+    drawAllPlayersHands();
+}//initial start setup stuff for a round
 //display functions
 function displayPlayers() {
     console.log(allPlayers);
@@ -254,25 +262,31 @@ function displayDrawnCard() {
     console.log('Card drawn is ' + cardDrawn[0].name + " of " + cardDrawn[0].suit);
 }//prints the single card drawn
 function printPlayerHand(player) {
-    console.log("");
     console.log(player.name + ' your cards are');
+    console.log("");
     console.log(player.hand[0].name + " of " + player.hand[0].suit);
     console.log(player.hand[1].name + " of " + player.hand[1].suit);
     console.log(player.hand[2].name + " of " + player.hand[2].suit);
+    console.log("");
 }//prints the card in a players hand
 function printPlayerHandValue(player) {
     console.log(player.name + ' potential hand value added is ' + calcPlayerPossibleScore(player));
 }//prints name and hand value
-
+function displayUpdatedHand() {
+    console.log("");
+    printPlayerHand(playerTitles[currentPlayer - 1]);
+    printPlayerHandValue(playerTitles[currentPlayer - 1]);
+}//used both printPlayerHand() and printPlayerHandValue() to show updated hand stats
+function displayArrayLengthInfo() {
+    console.log("All cards in deck length is " + allCardsInDeck.length);
+    console.log("Discard deck length is " + discardDeck.length);
+    console.log("Card drawn length is " + cardDrawn.length);
+}//prints length of allCardsInDeck, discardDeck, and cardDrawn
 
 async function main() {
-    makeAllCards();
-    await howManyPlayers();
-    makeAllPlayers(numPlayers);
-    drawAllPlayersHands();
-    printPlayerHand(playerTitles[currentPlayer-1]);
-    printPlayerHandValue(playerTitles[currentPlayer-1]);
-   // displayPlayers();
+    await startRound();
+
+    displayUpdatedHand();
     await action();
     rl.close();
 }
