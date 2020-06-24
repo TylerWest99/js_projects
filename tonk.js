@@ -16,6 +16,8 @@ const rl = readline.createInterface({
 
 //vars 
 let numPlayers;
+let currentPlayer = 1; //determines what players turn it is if num === 1 player 1 turn ... num === 4 player 4 turn 
+//if num === 0 a player tonked the round is over
 
 
 //arrays of cards
@@ -173,23 +175,11 @@ function calcPlayerPossibleScore(player) {
     }//if none match (1) 
     return possibleScore;
 }//calculates what your score would be if the round ended immediatly using your hand 
-function printPlayerHand(player) {
-    console.log(player.name + ' your cards are');
-    console.log(player.hand[0].name + " of " + player.hand[0].suit);
-    console.log(player.hand[1].name + " of " + player.hand[1].suit);
-    console.log(player.hand[2].name + " of " + player.hand[2].suit);
-}//prints the card in a players hand
-function printPlayerHandValue(player) {
-    console.log(player.name + ' potential hand value added is ' + calcPlayerPossibleScore(player));
-}//prints name and hand value
 function drawACard() {
     let rand = Math.floor(Math.random() * allCardsInDeck.length);//gets a random num 0-51 to index the deck
     cardDrawn.push(allCardsInDeck[rand]);//puts card in card drawn array from allCardsInDeck array 
     allCardsInDeck.splice(rand, 1);
 }//draws a random card from deck puts it in cardDrawn
-function printDrawnCard() {
-    console.log('drawn card is ' + cardDrawn[0].name + " of " + cardDrawn[0].suit);
-}//prints the single card drawn
 function swapACard(player, cardNum) {
     discardDeck.push(player.hand[cardNum]);//adds card from hand to discardDeck
     player.hand[cardNum] = cardDrawn[0]; //puts drawn card into hand
@@ -219,21 +209,39 @@ function drawAllPlayersHands() {
 //async functions
 async function howManyPlayers() {
     let promise1 = new Promise((resolve) => {
-        rl.question('How many players are there?', players => { resolve(players) })
+        rl.question('How many players are there? the limit is 4 \n', players => { resolve(players) })
     })
     numPlayers = await promise1;
     console.log("Ok so there are " + numPlayers + " players");
-
-
 }//obtains and prints the number of players
 async function action() {
     let action;
     let promise1 = new Promise((resolve) => {
-        rl.question('What action would you like to take you can tonk or draw?', players => { resolve(players) })
+        rl.question('What action would you like to take you can tonk or draw?\n', action1 => { resolve(action1) })
     })
     action = await promise1;
-    return action;
+
+    if (action === 'tonk') {
+        currentPlayer = 0; //ends round
+    }
+    if (action === 'draw') {
+        drawACard();
+        displayDrawnCard();
+        await whatCardToSwap();
+    }
 }//asks if you would like to tonk or draw
+async function whatCardToSwap() {
+    let card;
+    let promise1 = new Promise((resolve) => {
+        rl.question('Which card in your hand would you like to swap with if any? say 1, 2, 3, or none \n', num => { resolve(num) })
+    })
+    card = await promise1;
+    swapACard(playerTitles[currentPlayer - 1], card-1);
+
+    printPlayerHand(playerTitles[currentPlayer - 1]);
+    printPlayerHandValue(playerTitles[currentPlayer - 1]);//these show updated hand and score after a swap
+    console.log(playerTitles[currentPlayer - 1].hand);
+}
 
 //display functions
 function displayPlayers() {
@@ -241,20 +249,31 @@ function displayPlayers() {
 }//displays the games players 
 function displayAllCardsInDeckLength() {
     console.log(allCardsInDeck.length);
-}
+}//displays number of cards remaining in the deck
+function displayDrawnCard() {
+    console.log('Card drawn is ' + cardDrawn[0].name + " of " + cardDrawn[0].suit);
+}//prints the single card drawn
+function printPlayerHand(player) {
+    console.log("");
+    console.log(player.name + ' your cards are');
+    console.log(player.hand[0].name + " of " + player.hand[0].suit);
+    console.log(player.hand[1].name + " of " + player.hand[1].suit);
+    console.log(player.hand[2].name + " of " + player.hand[2].suit);
+}//prints the card in a players hand
+function printPlayerHandValue(player) {
+    console.log(player.name + ' potential hand value added is ' + calcPlayerPossibleScore(player));
+}//prints name and hand value
 
 
 async function main() {
+    makeAllCards();
     await howManyPlayers();
     makeAllPlayers(numPlayers);
-    makeAllCards();
     drawAllPlayersHands();
-    //printPlayerHand(player1);
-    //printPlayerHandValue(player1);
-   //await action();
-    displayPlayers();
-    displayAllCardsInDeckLength();
-    console.log("Edited on MAC")
+    printPlayerHand(playerTitles[currentPlayer-1]);
+    printPlayerHandValue(playerTitles[currentPlayer-1]);
+   // displayPlayers();
+    await action();
     rl.close();
 }
 //tester
