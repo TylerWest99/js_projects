@@ -288,9 +288,9 @@ function displayDrawnCard() {
 function printPlayerHand(player) {
     console.log(player.name + ' your cards are...');
     console.log("");
-    console.log(player.hand[0].name + " of " + player.hand[0].suit);
-    console.log(player.hand[1].name + " of " + player.hand[1].suit);
-    console.log(player.hand[2].name + " of " + player.hand[2].suit);
+    console.log(player.hand[0].name + " of " + player.hand[0].suit + ' (1)');
+    console.log(player.hand[1].name + " of " + player.hand[1].suit + ' (2)');
+    console.log(player.hand[2].name + " of " + player.hand[2].suit + ' (3)');
     console.log("");
 }//prints the card in a players hand
 function printPlayerHandValue(player) {
@@ -315,21 +315,55 @@ function printScores() {
 }//prints all player scores
 function setWinner() {
     if (allPlayers.length === 4) {
-
-    }   
+        //player 1 has the highest score 
+        if ((playerTitles[0].score > playerTitles[1].score) && (playerTitles[0].score > playerTitles[2].score) && (playerTitles[0].score > playerTitles[3].score)) {
+            winner = playerTitles[0].name;
+        }
+        //player 2 has the highest score
+        else if ((playerTitles[1].score > playerTitles[0].score) && (playerTitles[1].score > playerTitles[2].score) && (playerTitles[1].score > playerTitles[3].score)) {
+            winner = playerTitles[1].name;
+        }
+        //player 3 has the highest score
+        else if ((playerTitles[2].score > playerTitles[1].score) && (playerTitles[2].score > playerTitles[3].score) && (playerTitles[2].score > playerTitles[0].score)) {
+            winner = playerTitles[2].name;
+        }
+        //player 4 has the highest score
+        else if ((playerTitles[3].score > playerTitles[1].score) && (playerTitles[3].score > playerTitles[2].score) && (playerTitles[3].score > playerTitles[0].score)) {
+            winner = playerTitles[3].name;
+        }
+        else {
+            winner = 'draw';
+        }
+    }//for 4 player game 
     if (allPlayers.length === 3) {
-
-    }
+        //player 1 has the highest score
+        if ((playerTitles[0].score > playerTitles[1].score) && (playerTitles[0].score > playerTitles[2].score)) {
+            winner = playerTitles[0].name;
+        }
+        //player 2 has the highest score
+        else if ((playerTitles[1].score > playerTitles[0].score) && (playerTitles[1].score > playerTitles[2].score)) {
+            winner = playerTitles[1].name;
+        }
+        //player 3 has the highest score
+        else if ((playerTitles[2].score > playerTitles[0].score) && (playerTitles[2].score > playerTitles[1].score)) {
+            winner = playerTitles[2].name;
+        }
+        else {
+            winner = 'draw';
+        }
+    }//for 3 player game
     if (allPlayers.length === 2) {
+        //player 1 has higher score
         if (playerTitles[0].score > playerTitles[1].score) {
             winner = playerTitles[0].name;
         }
+        //player two has a higher score
         else if (playerTitles[1].score > playerTitles[0].score) {
             winner = playerTitles[1].name;
         } else {
             winner = 'draw';
         }
-    }
+    }//for two player game
 }//declares the winner
 
 async function main() {
@@ -346,9 +380,10 @@ async function main() {
 main();
 
 //find a way to redo questions if wrong thing is inputted (rejects);
-//find a way to set the winner (should work with two)
+//find a way to set the winner (should work) but needs tests
 //find a way to have it go an extra turn after a tonk is done 
-//find a way to show card number next to card in print hand
+//wait functions for time
+
 
 
 
