@@ -225,9 +225,12 @@ async function action() {
     if (action === 'tonk') {
         currentPlayer = 0; //ends round
         console.log("The game is over");
+        await wait3s();
         console.log("The scores are...");
+        await wait3s();
         printScores();
         setWinner();
+        await wait3s();
         if (winner !== 'draw') {
             console.log("The winner is " + winner);
         } else {
@@ -247,7 +250,7 @@ async function action() {
         }
         await endTurn();
     }
-}//asks if you would like to tonk or draw
+}//asks if you would like to tonk or draw  ***ACTION FUNCTION***
 async function whatCardToSwap() {
     let card;
     let promise1 = new Promise((resolve) => {
@@ -275,6 +278,14 @@ async function endTurn() {
     })
     end = await promise1;   
 }//moves the turn to the next player
+async function wait3s() {
+    let p;
+    let promise = new Promise(function (resolve, reject) {
+        setTimeout(() => resolve("Done"), 3000);
+    });
+    p = await promise;
+}//waits 3 second
+
 //display functions
 function displayPlayers() {
     console.log(allPlayers);
@@ -380,9 +391,8 @@ async function main() {
 main();
 
 //find a way to redo questions if wrong thing is inputted (rejects);
-//find a way to set the winner (should work) but needs tests
 //find a way to have it go an extra turn after a tonk is done 
-//wait functions for time
+//wait functions for time (maybe more)
 
 
 
