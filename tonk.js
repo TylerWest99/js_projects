@@ -424,7 +424,6 @@ async function main() {
 //tester
 main();
 
-//find a way to redo questions if wrong thing is inputted not on end turn or 123 or none yet (small fix for 1, 2, 3)
 //find a way to have it go an extra turn after a tonk is done 
 //maybe look at current player logic
-//issues should be fixed
+
