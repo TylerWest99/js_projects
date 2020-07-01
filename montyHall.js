@@ -53,8 +53,10 @@ function chooseADoor() {
 }//randomly chooses a door for a player of the three assigns it to choosenDoor
 function wasDoorChoosenCorrectly() {
     if (choosenDoor === correctDoor) {
+        //console.log("success");
         success++;
     } else {
+        //console.log("failure");
         failure++;
     }
 }//adds +1 to success or failures depending on if the choosen door was the correct door
@@ -92,6 +94,12 @@ function displaySuccessPercentage() {
 function displayCounter() {
     console.log(counter);
 }//displays counter
+function allDislayStats() {
+    displayChoosenDoor();
+    displayCorrectDoor();
+    displayDoors();
+}//some display functions
+
 //run method
 function main() {
     makeAllDoors();
@@ -100,7 +108,7 @@ function main() {
         mainLoop();
         counter++;
     }
-    successPercentage = success / failure;
+    successPercentage = success / counter;
     displayCounter();
     displaySuccessPercentage();
 
