@@ -420,7 +420,7 @@ main();
 
 //find a way to redo questions if wrong thing is inputted (rejects);
 //find a way to have it go an extra turn after a tonk is done 
-
+//fucking changes 
 
 
 
