@@ -214,18 +214,24 @@ async function howManyPlayers() {
     })
     numPlayers = await promise1;
     if (!(numPlayers > 0 && numPlayers < 5)) {
+        console.log("");
+        console.log("Sorry that is an invalid response try again");
         await howManyPlayers();
     }
     //console.log("Ok so there are " + numPlayers + " players");
 }//obtains and prints the number of players
 async function action() {
-    let action;
+    let actionResponse;
     let promise1 = new Promise((resolve) => {
         rl.question('What action would you like to take you can tonk or draw?\n', action1 => { resolve(action1) })
     })
-    action = await promise1;
-
-    if (action === 'tonk') {
+    actionResponse = await promise1;
+    if (!(actionResponse === 'tonk' || actionResponse === 'draw')) {
+        console.log("");
+        console.log("Sorry that is an invalid response try again");
+        await action();
+    }
+    if (actionResponse === 'tonk') {
         currentPlayer = 0; //ends round
         console.log("The game is over");
         await wait3s();
@@ -240,7 +246,7 @@ async function action() {
             console.log("It's a draw");
         }
     }
-    if (action === 'draw') {
+    if (actionResponse === 'draw') {
         drawACard();
         console.log("");
         await wait2s();
