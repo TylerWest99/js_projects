@@ -66,7 +66,7 @@ class Player {
 function makeAllCards(){
     //(suit, name, value)
     //diamonds
-    let aceDiamond = new Card('diamond', 'ace', 1);
+    let aceDiamond = new Card('diamond', 'ace', 11);
     let twoDiamond = new Card('diamond', '2', 2);
     let threeDiamond = new Card('diamond', '3', 3);
     let fourDiamond = new Card('diamond', '4', 4);
@@ -80,7 +80,7 @@ function makeAllCards(){
     let queenDiamond = new Card('diamond', 'queen', 10);
     let kingDiamond = new Card('diamond', 'king', 10);
     //hearts
-    let aceHeart = new Card('heart', 'ace', 1);
+    let aceHeart = new Card('heart', 'ace', 11);
     let twoHeart = new Card('heart', '2', 2);
     let threeHeart = new Card('heart', '3', 3);
     let fourHeart = new Card('heart', '4', 4);
@@ -94,7 +94,7 @@ function makeAllCards(){
     let queenHeart = new Card('heart', 'queen', 10);
     let kingHeart = new Card('heart', 'king', 10);
     //spades
-    let aceSpade = new Card('spade', 'ace', 1);
+    let aceSpade = new Card('spade', 'ace', 11);
     let twoSpade = new Card('spade', '2', 2);
     let threeSpade = new Card('spade', '3', 3);
     let fourSpade = new Card('spade', '4', 4);
@@ -108,7 +108,7 @@ function makeAllCards(){
     let queenSpade = new Card('spade', 'queen', 10);
     let kingSpade = new Card('spade', 'king', 10);
     //clubs
-    let aceClub = new Card('club', 'ace', 1);
+    let aceClub = new Card('club', 'ace', 11);
     let twoClub = new Card('club', '2', 2);
     let threeClub = new Card('club', '3', 3);
     let fourClub = new Card('club', '4', 4);
@@ -240,8 +240,10 @@ async function action() {
     if (action === 'draw') {
         drawACard();
         console.log("");
+        await wait2s();
         displayDrawnCard();
         await whatCardToSwap();
+        await wait2s();//put this in to fix changing players too early may need tuning
         if (currentPlayer !== allPlayers.length) {
             currentPlayer++;
         }// if not last player updates the current player after a turn by adding +1
@@ -273,6 +275,7 @@ async function startRound() {
 }//initial start setup stuff for a round
 async function endTurn() {
     let end;
+    await wait3s();
     let promise1 = new Promise((resolve) => {
         rl.question('Your turn is now over, type end to end your turn?\n', end1 => { resolve(end1) })
     })
@@ -285,6 +288,20 @@ async function wait3s() {
     });
     p = await promise;
 }//waits 3 second
+async function wait2s() {
+    let p;
+    let promise = new Promise(function (resolve, reject) {
+        setTimeout(() => resolve("Done"), 2000);
+    });
+    p = await promise;
+}//waits 2 second
+async function wait1s() {
+    let p;
+    let promise = new Promise(function (resolve, reject) {
+        setTimeout(() => resolve("Done"), 1000);
+    });
+    p = await promise;
+}//waits 1 second
 
 //display functions
 function displayPlayers() {
@@ -296,7 +313,8 @@ function displayAllCardsInDeckLength() {
 function displayDrawnCard() {
     console.log('Card drawn is ' + cardDrawn[0].name + " of " + cardDrawn[0].suit);
 }//prints the single card drawn
-function printPlayerHand(player) {
+async function printPlayerHand(player) {
+    await wait1s();
     console.log(player.name + ' your cards are...');
     console.log("");
     console.log(player.hand[0].name + " of " + player.hand[0].suit + ' (1)');
@@ -304,14 +322,15 @@ function printPlayerHand(player) {
     console.log(player.hand[2].name + " of " + player.hand[2].suit + ' (3)');
     console.log("");
 }//prints the card in a players hand
-function printPlayerHandValue(player) {
+async function printPlayerHandValue(player) {
+    await wait1s();
     console.log(player.name + ' potential hand value added is ' + calcPlayerPossibleScore(player));
 }//prints name and hand value
-function displayUpdatedHand() {
+async function displayUpdatedHand() {
     console.log("");
-    printPlayerHand(playerTitles[currentPlayer - 1]);
-    printPlayerHandValue(playerTitles[currentPlayer - 1]);
-}//used both printPlayerHand() and printPlayerHandValue() to show updated hand stats
+    await printPlayerHand(playerTitles[currentPlayer - 1]);
+    await printPlayerHandValue(playerTitles[currentPlayer - 1]);
+}//used both printPlayerHand() and printPlayerHandValue() to show updated hand stats  ***IMPORTANT DISPLAY OF BOTH HAND AND HAND VALUE***
 function displayArrayLengthInfo() {
     console.log("All cards in deck length is " + allCardsInDeck.length);
     console.log("Discard deck length is " + discardDeck.length);
@@ -381,7 +400,7 @@ async function main() {
     await startRound();
     while (currentPlayer !== 0) {
         //playerTurnStartAlert();
-        displayUpdatedHand();
+        await displayUpdatedHand();
         await action();
     }
     
@@ -392,7 +411,6 @@ main();
 
 //find a way to redo questions if wrong thing is inputted (rejects);
 //find a way to have it go an extra turn after a tonk is done 
-//wait functions for time (maybe more)
 
 
 
