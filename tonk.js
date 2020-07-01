@@ -207,6 +207,7 @@ function drawAllPlayersHands() {
         drawAHand(element);
     });
 }//draws a hand for all players
+
 //async functions
 async function howManyPlayers() {
     let promise1 = new Promise((resolve) => {
@@ -250,31 +251,34 @@ async function action() {
         drawACard();
         console.log("");
         await wait2s();
-        displayDrawnCard();
         await whatCardToSwap();
-        await wait2s();//put this in to fix changing players too early may need tuning
-        if (currentPlayer !== allPlayers.length) {
-            currentPlayer++;
-        }// if not last player updates the current player after a turn by adding +1
-        else if (currentPlayer === allPlayers.length) {
-            currentPlayer = 1;
-        }
+        console.log("Note");//should not get here but does for some reason then goes to what card to swap for some reason
         await endTurn();
     }
 }//asks if you would like to tonk or draw  ***ACTION FUNCTION***
 async function whatCardToSwap() {
-    let card;
+    displayDrawnCard();
+    let cardNum;
     let promise1 = new Promise((resolve) => {
         rl.question('Which card in your hand would you like to swap with if any? say 1, 2, 3, or none \n', num => { resolve(num) })
     })
-    card = await promise1;
-    swapACard(playerTitles[currentPlayer - 1], card - 1);
-    if (card === 'none') {
-        discardDeck.push(cardDrawn[0]); 
+    cardNum = await promise1;
+    if (!((cardNum > 0) && (cardNum < 4))) {
+        console.log("");
+        console.log("Sorry that is an invalid response try again");
+        whatCardToSwap();
+    }
+    if ((cardNum > 0) && (cardNum < 4)) {
+        swapACard(playerTitles[currentPlayer - 1], cardNum - 1);
+        displayUpdatedHand();//these show updated hand and score after a swap
+    }
+    else if (cardNum === 'none') {
+        discardDeck.push(cardDrawn[0]);
         cardDrawn = [];
+        displayUpdatedHand();//these show updated hand and score after a swap
     }//if card is not swapped puts cardDrawn in discard pile and empties cardDrawn
 
-    displayUpdatedHand();//these show updated hand and score after a swap
+
 }//asks what card in hand to swap with and shows updated hand and hand value
 async function startRound() {
     makeAllCards();
@@ -284,12 +288,18 @@ async function startRound() {
 }//initial start setup stuff for a round
 async function endTurn() {
     let end;
-    await wait3s();
+    await wait2s();
     let promise1 = new Promise((resolve) => {
         rl.question('Your turn is now over, type end to end your turn?\n', end1 => { resolve(end1) })
     })
-    end = await promise1;   
-}//moves the turn to the next player
+    end = await promise1;
+    if (currentPlayer !== allPlayers.length) {
+        currentPlayer++;
+    }// if not last player updates the current player after a turn by adding +1
+    else if (currentPlayer === allPlayers.length) {
+        currentPlayer = 1;
+    }
+}//moves the turn to the next player and has logic for changing current player
 async function wait3s() {
     let p;
     let promise = new Promise(function (resolve, reject) {
@@ -311,6 +321,13 @@ async function wait1s() {
     });
     p = await promise;
 }//waits 1 second
+async function wait1andAHalfs() {
+    let p;
+    let promise = new Promise(function (resolve, reject) {
+        setTimeout(() => resolve("Done"), 1500);
+    });
+    p = await promise;
+}//waits 1.5 second
 
 //display functions
 function displayPlayers() {
@@ -420,7 +437,7 @@ main();
 
 //find a way to redo questions if wrong thing is inputted (rejects);
 //find a way to have it go an extra turn after a tonk is done 
-//fucking changes 
+
 
 
 
