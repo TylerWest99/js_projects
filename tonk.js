@@ -285,11 +285,16 @@ async function startRound() {
 }//initial start setup stuff for a round
 async function endTurn() {
     let end;
-    await wait3s();
+    await wait2s();
     let promise1 = new Promise((resolve) => {
         rl.question('Your turn is now over, type end to end your turn?\n', end1 => { resolve(end1) })
     })
     end = await promise1;
+    if (end !== "end") {
+        console.log("");
+        console.log("error");
+        await endTurn();
+    }
 }//moves the turn to the next player
 async function wait3s() {
     let p;
@@ -421,4 +426,5 @@ main();
 
 //find a way to redo questions if wrong thing is inputted not on end turn or 123 or none yet (small fix for 1, 2, 3)
 //find a way to have it go an extra turn after a tonk is done 
+//maybe look at current player logic
 //issues should be fixed
