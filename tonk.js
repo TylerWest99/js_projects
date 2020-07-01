@@ -18,7 +18,7 @@ const rl = readline.createInterface({
 let numPlayers;
 let currentPlayer = 1; //determines what players turn it is if num === 1 player 1 turn ... num === 4 player 4 turn 
 //if num === 0 a player tonked the round is over
-var winner; //winning player
+var winner; //winning player in string form
 
 
 //arrays of cards
@@ -213,6 +213,9 @@ async function howManyPlayers() {
         rl.question('How many players are there? the limit is 4 \n', players => { resolve(players) })
     })
     numPlayers = await promise1;
+    if (!(numPlayers > 0 && numPlayers < 5)) {
+        await howManyPlayers();
+    }
     //console.log("Ok so there are " + numPlayers + " players");
 }//obtains and prints the number of players
 async function action() {
@@ -405,7 +408,7 @@ async function main() {
     }
     
     rl.close();
-}
+}//method with everything
 //tester
 main();
 
