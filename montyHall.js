@@ -11,10 +11,18 @@ class Door {
 }//make door class and pushes made doors to allDoors array
 
 //arrays and vars
+
 let allDoors = [];
+//reset
 let choosenDoor;
 let correctDoor;
 let wrongDoors = [];
+//permanent
+let success = 0;
+let failure = 0;
+let successPercentage;
+let counter = 0;
+
 
 
 //functions
@@ -43,6 +51,27 @@ function chooseADoor() {
     let randomNum = randomNum0to2();
     choosenDoor = allDoors[randomNum];
 }//randomly chooses a door for a player of the three assigns it to choosenDoor
+function wasDoorChoosenCorrectly() {
+    if (choosenDoor === correctDoor) {
+        success++;
+    } else {
+        failure++;
+    }
+}//adds +1 to success or failures depending on if the choosen door was the correct door
+function reset() {
+    for (var i = 0; i < 3; i++) {
+        allDoors[i].prize = null;
+        choosenDoor = null;
+        correctDoor = null;
+        wrongDoors = [];
+    }
+}//resets everything to go agane
+function mainLoop() {
+    assignDoors();
+    chooseADoor();
+    wasDoorChoosenCorrectly();
+    reset();   
+}//does the main loop through and awards a + to success or failure 
 
 //display functions
 function displayDoors() {
@@ -57,18 +86,25 @@ function displayCorrectDoor() {
 function displayWrongDoors() {
     console.log("wrong doors are " + wrongDoors[0].name + " and " + wrongDoors[1].name);
 }//shows incorrect doors
-
+function displaySuccessPercentage() {
+    console.log("The success percentage is " + successPercentage);
+}//displays the success percentage
+function displayCounter() {
+    console.log(counter);
+}//displays counter
 //run method
 function main() {
     makeAllDoors();
-    assignDoors();
-    chooseADoor();
-    //displayChoosenDoor();
-    //displayCorrectDoor();
-    displayWrongDoors();
-     
 
-    displayDoors();
+    for (var i = 0; i < 100000; i++) {
+        mainLoop();
+        counter++;
+    }
+    successPercentage = success / failure;
+    displayCounter();
+    displaySuccessPercentage();
+
+
 }//main method
 
 //actually running
