@@ -265,15 +265,16 @@ async function action() {
 async function whatCardToSwap() {
     let card;
     let promise1 = new Promise((resolve) => {
-        rl.question('Which card in your hand would you like to swap with if any? say 1, 2, 3, or none \n', num => { resolve(num) })
+        rl.question('Which card in your hand would you like to swap with if any? type 1, 2, or 3, or type anything else to not swap cards \n', num => { resolve(num) })
     })
     card = await promise1;
+    if (card === 1 || card === 2 || card === 3) { 
     swapACard(playerTitles[currentPlayer - 1], card - 1);
-    if (card === 'none') {
+    }//swaps the card if 1 2 or 3 else passes on the swap
+    else {
         discardDeck.push(cardDrawn[0]);
         cardDrawn = [];
     }//if card is not swapped puts cardDrawn in discard pile and empties cardDrawn
-
     displayUpdatedHand();//these show updated hand and score after a swap
 }//asks what card in hand to swap with and shows updated hand and hand value
 async function startRound() {
@@ -418,6 +419,6 @@ async function main() {
 //tester
 main();
 
-//find a way to redo questions if wrong thing is inputted (rejects);
+//find a way to redo questions if wrong thing is inputted not on end turn or 123 or none yet (small fix for 1, 2, 3)
 //find a way to have it go an extra turn after a tonk is done 
 //issues should be fixed
