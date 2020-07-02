@@ -13,6 +13,7 @@ class Door {
 //arrays and vars
 
 let allDoors = [];
+let allDoorsInPlay = [];
 //reset
 let choosenDoor;
 let correctDoor;
@@ -30,7 +31,7 @@ function makeAllDoors() {
     let door1 = new Door("door1", null);
     let door2 = new Door("door2", null);
     let door3 = new Door("door3", null);
-    
+
 }//makes all 3 doors and leaves prize blank
 function randomNum0to2() {
     let rand = Math.floor(Math.random() * 3);//gets a random num 0-51 to index the deck
@@ -60,6 +61,10 @@ function wasDoorChoosenCorrectly() {
         failure++;
     }
 }//adds +1 to success or failures depending on if the choosen door was the correct door
+function allDoorsInPlayFunc() {
+    allDoorsInPlay = allDoors;
+}//allDoorsInPlay = allDoors
+//special functions
 function reset() {
     for (var i = 0; i < 3; i++) {
         allDoors[i].prize = null;
@@ -69,11 +74,15 @@ function reset() {
     }
 }//resets everything to go agane
 function mainLoop() {
+    allDoorsInPlayFunc();
     assignDoors();
     chooseADoor();
     wasDoorChoosenCorrectly();
-    reset();   
+    displayStats();
+    console.log(allDoorsInPlay);
+    reset();
 }//does the main loop through and awards a + to success or failure 
+
 
 //display functions
 function displayDoors() {
@@ -94,7 +103,7 @@ function displaySuccessPercentage() {
 function displayCounter() {
     console.log(counter);
 }//displays counter
-function allDislayStats() {
+function displayStats() {
     displayChoosenDoor();
     displayCorrectDoor();
     displayDoors();
@@ -104,7 +113,7 @@ function allDislayStats() {
 function main() {
     makeAllDoors();
 
-    for (var i = 0; i < 100000; i++) {
+    for (var i = 0; i < 1; i++) {
         mainLoop();
         counter++;
     }
