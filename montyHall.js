@@ -18,6 +18,7 @@ let allDoorsInPlay = [];
 let choosenDoor;
 let correctDoor;
 let wrongDoors = [];
+let removedDoor;
 //permanent
 let success = 0;
 let failure = 0;
@@ -39,18 +40,18 @@ function randomNum0to2() {
 }//makes and returns random num 0 to 2
 function assignDoors() {
     let carDoorNum = randomNum0to2();
-    allDoors[carDoorNum].prize = 'car';
-    correctDoor = allDoors[carDoorNum];
+    allDoorsInPlay[carDoorNum].prize = 'car';
+    correctDoor = allDoorsInPlay[carDoorNum];
     for (var i = 0; i < 3; i++) {
-        if (allDoors[i].prize === null) {
-            allDoors[i].prize = 'goat';
-            wrongDoors.push(allDoors[i]);
+        if (allDoorsInPlay[i].prize === null) {
+            allDoorsInPlay[i].prize = 'goat';
+            wrongDoors.push(allDoorsInPlay[i]);
         }
     }
 }//assigns the doors the car and goats
 function chooseADoor() {
     let randomNum = randomNum0to2();
-    choosenDoor = allDoors[randomNum];
+    choosenDoor = allDoorsInPlay[randomNum];
 }//randomly chooses a door for a player of the three assigns it to choosenDoor
 function wasDoorChoosenCorrectly() {
     if (choosenDoor === correctDoor) {
@@ -64,10 +65,25 @@ function wasDoorChoosenCorrectly() {
 function allDoorsInPlayFunc() {
     allDoorsInPlay = allDoors;
 }//allDoorsInPlay = allDoors
+function removeADoor() {
+    let randNum = randomNum0to2();
+    if (allDoorsInPlay[randNum] === correctDoor) {
+        removeADoor();
+    } 
+    else if (allDoorsInPlay[randNum] === choosenDoor) {
+        removeADoor();
+    }
+    else {
+        removedDoor = allDoorsInPlay[randNum];
+        allDoorsInPlay.splice(randNum, 1); //removes the door 
+    }
+}//removes a door from allDoorsInPlay
 //special functions
 function reset() {
+    //add back in the removed door
+    allDoorsInPlay.push(removedDoor);
     for (var i = 0; i < 3; i++) {
-        allDoors[i].prize = null;
+        allDoorsInPlay[i].prize = null;
         choosenDoor = null;
         correctDoor = null;
         wrongDoors = [];
@@ -77,9 +93,10 @@ function mainLoop() {
     allDoorsInPlayFunc();
     assignDoors();
     chooseADoor();
+    removeADoor();
     wasDoorChoosenCorrectly();
     displayStats();
-    console.log(allDoorsInPlay);
+    //console.log(allDoorsInPlay);
     reset();
 }//does the main loop through and awards a + to success or failure 
 
@@ -98,7 +115,7 @@ function displayWrongDoors() {
     console.log("wrong doors are " + wrongDoors[0].name + " and " + wrongDoors[1].name);
 }//shows incorrect doors
 function displaySuccessPercentage() {
-    console.log("The success percentage is " + successPercentage);
+    console.log("The success percentage is " + successPercentage * 100 + '%');
 }//displays the success percentage
 function displayCounter() {
     console.log(counter);
@@ -117,9 +134,9 @@ function main() {
         mainLoop();
         counter++;
     }
-    successPercentage = success / counter;
-    displayCounter();
-    displaySuccessPercentage();
+    //successPercentage = success / counter;
+    //displayCounter();
+    //displaySuccessPercentage();
 
 
 }//main method
