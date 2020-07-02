@@ -11,8 +11,13 @@ class Door {
     }
 }//make door class and pushes made doors to allDoors array
 
-//arrays and vars
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
+//arrays and vars
 let allDoors = [];
 let allDoorsInPlay = [];
 //reset
@@ -25,6 +30,7 @@ let success = 0;
 let failure = 0;
 let successPercentage;
 let counter = 0;
+let mainLoopNum;//keeps track of switch door on or off (1 is on 0 is off)
 
 
 
@@ -106,7 +112,7 @@ function displaySuccessPercentage() {
     console.log("The success percentage is " + successPercentage * 100 + '%');
 }//displays the success percentage
 function displayCounter() {
-    console.log(counter);
+    console.log("After running the test " + counter + " times");
 }//displays counter
 function displayStats() {
     displayChoosenDoor();
@@ -124,7 +130,7 @@ function reset() {
         wrongDoors = [];
     }
 }//resets everything to go agane
-function mainLoop() {
+function mainLoopWithSwitch() {
     allDoorsInPlayFunc();//makes another array for allDoorsInPlay
     assignDoors();//assigns all three doors a value either car or goat
     chooseADoor();//randomly chooses 1 of 3 doors
@@ -140,22 +146,41 @@ function mainLoopNoSwitch() {
     wasDoorChoosenCorrectly();//tallies success and failures
     reset();
 }//does the main loop through and awards a + to success or failure 
-
+async function chooseMainLoop() {
+    let result;
+    let promise1 = new Promise((resolve) => {
+        rl.question('Would you like to switch doors? Type yes or no \n', result1 => { resolve(result1) })
+    })
+    result = await promise1;
+    if (result === 'yes') {
+        mainLoopNum = 1;
+    }
+    else if (result === 'no') {
+        mainLoopNum = 0;
+    } else {
+        await chooseMainLoop();
+    }
+}
 //run method
-function main() {
+async function main() {
     makeAllDoors();
-
+    await chooseMainLoop();
     for (var i = 0; i < 1000000; i++) {
         //one of the two main methods must allways be commented out
-        mainLoop();
-        //mainLoopNoSwitch();
+        //main loop type goes here
+        if (mainLoopNum === 1) {
+            mainLoopWithSwitch();
+        }
+        if (mainLoopNum === 0) {
+            mainLoopNoSwitch();
+        }
         counter++;
     }
     successPercentage = success / counter;
     displayCounter();
     displaySuccessPercentage();
 
-
+    rl.close();
 }//main method
 
 //actually running (Version 1.0.0)
