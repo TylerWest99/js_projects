@@ -185,3 +185,6 @@ async function main() {
 
 //actually running (Version 1.0.0)
 main();
+
+//final notes
+//this proves that by switching the door at the end your success rate goes from 33% to 66%
