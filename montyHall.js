@@ -128,9 +128,7 @@ function mainLoop() {
     assignDoors();//assigns all three doors a value either car or goat
     chooseADoor();//randomly chooses 1 of 3 doors
     removeADoor();//removes a door not choosen and not with car
-    displayStats();
     swap();
-    displayStats();
     wasDoorChoosenCorrectly();//tallies success and failures
     reset();
 }//does the main loop through and awards a + to success or failure 
