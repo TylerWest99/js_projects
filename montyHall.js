@@ -17,7 +17,7 @@ let allDoorsInPlay = [];
 //reset
 let choosenDoor;
 let correctDoor;
-let wrongDoors = [];
+//let wrongDoors = [];
 let removedDoor;
 //permanent
 let success = 0;
@@ -45,7 +45,7 @@ function assignDoors() {
     for (var i = 0; i < 3; i++) {
         if (allDoorsInPlay[i].prize === null) {
             allDoorsInPlay[i].prize = 'goat';
-            wrongDoors.push(allDoorsInPlay[i]);
+           // wrongDoors.push(allDoorsInPlay[i]);
         }
     }
 }//assigns the doors the car and goats
@@ -78,29 +78,16 @@ function removeADoor() {
         allDoorsInPlay.splice(randNum, 1); //removes the door 
     }
 }//removes a door from allDoorsInPlay
-//special functions
-function reset() {
-    //add back in the removed door
-    allDoorsInPlay.push(removedDoor);
-    for (var i = 0; i < 3; i++) {
-        allDoorsInPlay[i].prize = null;
-        choosenDoor = null;
-        correctDoor = null;
-        wrongDoors = [];
+function swap() {
+    let originalChoosenDoor;
+    let otherDoor;
+    for (var i = 0; i < allDoorsInPlay.length; i++) {
+        if(allDoorsInPlay[i] !== (choosenDoor)) {
+            otherDoor = allDoorsInPlay[i];//if it does not match the choosenDoor 
+        }
     }
-}//resets everything to go agane
-function mainLoop() {
-    allDoorsInPlayFunc();
-    assignDoors();
-    chooseADoor();
-    removeADoor();
-    wasDoorChoosenCorrectly();
-    displayStats();
-    //console.log(allDoorsInPlay);
-    reset();
-}//does the main loop through and awards a + to success or failure 
-
-
+    choosenDoor = otherDoor; //***CRITICAL*** this switches the door off of the original choosenDoor to the other door
+}//swaps your choosenDoor with the door you didn't choose
 //display functions
 function displayDoors() {
     console.log(allDoors);
@@ -125,21 +112,43 @@ function displayStats() {
     displayCorrectDoor();
     displayDoors();
 }//some display functions
+//special functions
+function reset() {
+    //add back in the removed door
+    allDoorsInPlay.push(removedDoor);
+    for (var i = 0; i < 3; i++) {
+        allDoorsInPlay[i].prize = null;
+        choosenDoor = null;
+        correctDoor = null;
+        wrongDoors = [];
+    }
+}//resets everything to go agane
+function mainLoop() {
+    allDoorsInPlayFunc();//makes another array for allDoorsInPlay
+    assignDoors();//assigns all three doors a value either car or goat
+    chooseADoor();//randomly chooses 1 of 3 doors
+    removeADoor();//removes a door not choosen and not with car
+    displayStats();
+    swap();
+    displayStats();
+    wasDoorChoosenCorrectly();//tallies success and failures
+    reset();
+}//does the main loop through and awards a + to success or failure 
 
 //run method
 function main() {
     makeAllDoors();
 
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 1000000; i++) {
         mainLoop();
         counter++;
     }
-    //successPercentage = success / counter;
-    //displayCounter();
-    //displaySuccessPercentage();
+    successPercentage = success / counter;
+    displayCounter();
+    displaySuccessPercentage();
 
 
 }//main method
 
-//actually running
+//actually running (Version 1.0.0)
 main();
