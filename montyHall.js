@@ -1,6 +1,7 @@
 // JavaScript source code
 //Monty Hall problem
 //3 doors which 1 has a car while the others have 2 goats 
+//***FINAL VERSION***
 
 class Door {
     constructor(name, prize) {
@@ -132,13 +133,22 @@ function mainLoop() {
     wasDoorChoosenCorrectly();//tallies success and failures
     reset();
 }//does the main loop through and awards a + to success or failure 
+function mainLoopNoSwitch() {
+    allDoorsInPlayFunc();//makes another array for allDoorsInPlay
+    assignDoors();//assigns all three doors a value either car or goat
+    chooseADoor();//randomly chooses 1 of 3 doors
+    wasDoorChoosenCorrectly();//tallies success and failures
+    reset();
+}//does the main loop through and awards a + to success or failure 
 
 //run method
 function main() {
     makeAllDoors();
 
     for (var i = 0; i < 1000000; i++) {
+        //one of the two main methods must allways be commented out
         mainLoop();
+        //mainLoopNoSwitch();
         counter++;
     }
     successPercentage = success / counter;
