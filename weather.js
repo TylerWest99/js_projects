@@ -49,7 +49,7 @@ async function wait() {
 
 async function Main() {
     let num = 1;
-    while (num < 11) {
+    while (num < 25) {
         mainData();
         console.log(num);
         await wait1Min();
