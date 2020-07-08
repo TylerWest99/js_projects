@@ -31,15 +31,15 @@ function mainData() {
         //temps.push(currentTemp);
 
         function printData(){
-        console.log("On " + currentDay + " the " + dateDay + " of " + months[dateMonth - 1] + ", " + dateYear);
-        console.log("The current Temperature is " + currentTemp + " degrees");
-        console.log("But it feels like " + currentFeelsLike + " degrees");
-        console.log("And it is " + currentSkies);
-        console.log("The windspeed is " + currentWindSpeed);
-        console.log("The humidity is " + currentHumidity);
-        console.log("The current time is " + currentTime);
+       // console.log("On " + currentDay + " the " + dateDay + " of " + months[dateMonth - 1] + ", " + dateYear);
+        //console.log("The current Temperature is " + currentTemp + " degrees");
+        //console.log("But it feels like " + currentFeelsLike + " degrees");
+        //console.log("And it is " + currentSkies);
+        //console.log("The windspeed is " + currentWindSpeed);
+        //console.log("The humidity is " + currentHumidity);
+        //console.log("The current time is " + currentTime);
     }//function to print useful info
-        printData();
+        //printData();
     });
 }
 async function wait() {
