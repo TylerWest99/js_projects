@@ -2,8 +2,10 @@
 
 var weather = require('weather-js');
 const readline = require("readline");
+//let temps = [];
 
 function mainData() {
+    
     weather.find({ search: 'Wixom, MI', degreeType: 'F' }, function (err, result) {
         if (err) console.log(err);
         //vars 
@@ -26,6 +28,7 @@ function mainData() {
         } else {
             currentTime = currentTimeHour + ":" + currentTimeMin + " AM";
         }
+        //temps.push(currentTemp);
 
         function printData(){
         console.log("On " + currentDay + " the " + dateDay + " of " + months[dateMonth - 1] + ", " + dateYear);
@@ -42,7 +45,7 @@ function mainData() {
 async function wait() {
     let p;
     let promise = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve("Done"), 300000);
+        setTimeout(() => resolve("Done"), 10000);
     });
     p = await promise;
 }//waits 1 hour
@@ -50,9 +53,10 @@ async function wait() {
 async function Main() {
     let num = 1;
     while (num < 25) {
+        //console.log(temps);
         mainData();
         console.log(num);
-        await wait1Min();
+        await wait();
         num++;
 
     }
