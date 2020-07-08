@@ -56,5 +56,5 @@ async function Main() {
         num++;
 
     }
-}
-Main();
+}//collects all kinds of weather data at an hour interval all day
+Main(); 
