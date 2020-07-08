@@ -65,7 +65,7 @@ function arrayLoop() {
 
 async function Main() {
     let num = 1;
-    while (num < 25) {
+    while (num < 42) {
         mainData();
         console.log(num);
         await wait();
