@@ -2,7 +2,13 @@
 
 var weather = require('weather-js');
 const readline = require("readline");
-//let temps = [];
+//arrays of data :)
+let temps = []; //temps throughout the day
+let times = []; //time stamps of the day
+let feelsLikeTemps = [];//feels like temps for day
+let winds = [];
+let humidity = [];
+let skies = [];
 
 function mainData() {
     
@@ -27,38 +33,45 @@ function mainData() {
             currentTime = (currentTimeHour - 12) + ":" + currentTimeMin + " PM";
         } else {
             currentTime = currentTimeHour + ":" + currentTimeMin + " AM";
-        }
-        //temps.push(currentTemp);
-
-        function printData(){
-       // console.log("On " + currentDay + " the " + dateDay + " of " + months[dateMonth - 1] + ", " + dateYear);
-        //console.log("The current Temperature is " + currentTemp + " degrees");
-        //console.log("But it feels like " + currentFeelsLike + " degrees");
-        //console.log("And it is " + currentSkies);
-        //console.log("The windspeed is " + currentWindSpeed);
-        //console.log("The humidity is " + currentHumidity);
-        //console.log("The current time is " + currentTime);
-    }//function to print useful info
-        //printData();
+        }//figures out current time
+        //array setters
+        times.push(currentTime);
+        temps.push(currentTemp);
+        feelsLikeTemps.push(currentFeelsLike);
+        winds.push(currentWindSpeed);
+        humidity.push(currentHumidity);
+        skies.push(currentSkies);
     });
 }
 async function wait() {
     let p;
     let promise = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve("Done"), 3600000);
+        setTimeout(() => resolve("Done"),3600000);//3600000 for an hour (5 0s)
     });
     p = await promise;
 }//waits 1 hour
+function arrayLoop() {
+    for (var i = 0; i < times.length; i++) {
+        console.log("At " + times[i] + ":"); //shows time logged 
+        console.log("Temperature: " + temps[i]);// shows the temps 
+        console.log("Feels like: " + feelsLikeTemps[i]); //shows feels like temps 
+        console.log("The skies are: " + skies[i]); //shows skies
+        console.log("The humidity is: " + humidity[i]); //shows humidity
+        console.log("The winds are: " + winds[i]); //shows winds
+        console.log("");
+
+    }
+}
 
 async function Main() {
     let num = 1;
     while (num < 25) {
-        //console.log(temps);
         mainData();
         console.log(num);
         await wait();
         num++;
-
     }
+    console.log("");
+   arrayLoop();
 }//collects all kinds of weather data at an hour interval all day
 Main(); 
