@@ -45,7 +45,7 @@ function mainData() {
 async function wait() {
     let p;
     let promise = new Promise(function (resolve, reject) {
-        setTimeout(() => resolve("Done"), 10000);
+        setTimeout(() => resolve("Done"), 3600000);
     });
     p = await promise;
 }//waits 1 hour
