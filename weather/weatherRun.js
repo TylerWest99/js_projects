@@ -41,6 +41,7 @@ function main() {
             console.log("Skies: " + currentSkies);
             console.log("Windspeed: " + currentWindSpeed);
             console.log("Humidity: " + currentHumidity);
+            console.log("");
         }//function to print useful info
 
         printData();
