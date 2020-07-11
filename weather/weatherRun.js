@@ -35,12 +35,12 @@ function main() {
         }
 
         function printData() {
-            console.log("On " + currentDay + " the " + dateDay + " of " + months[dateMonth - 1] + ", " + dateYear + " at " + currentTime);
-            console.log("The current Temperature is " + currentTemp + " degrees");
-            console.log("And it feels like " + currentFeelsLike + " degrees");
-            console.log("And it is " + currentSkies);
-            console.log("The windspeed is " + currentWindSpeed);
-            console.log("The humidity is " + currentHumidity);
+            console.log("On " + currentDay + " " + months[dateMonth - 1] + " " + dateDay + ", " + dateYear + " at " + currentTime +":");
+            console.log("Current Temperature: " + currentTemp + " degrees");
+            console.log("Feels like: " + currentFeelsLike + " degrees");
+            console.log("Skies: " + currentSkies);
+            console.log("Windspeed: " + currentWindSpeed);
+            console.log("Humidity: " + currentHumidity);
         }//function to print useful info
 
         printData();
