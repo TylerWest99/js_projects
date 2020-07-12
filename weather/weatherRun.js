@@ -1,6 +1,6 @@
 // JavaScript source code
 //weather app node js
-
+//#!/usr/local/bin/node
 
 var weather = require('weather-js');
 function main() {

@@ -1,1 +1,0 @@
-This is the weather file that will track hourly weather stats
