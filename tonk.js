@@ -17,6 +17,7 @@ const rl = readline.createInterface({
 //vars 
 let numPlayers;
 let currentPlayer = 1; //determines what players turn it is if num === 1 player 1 turn ... num === 4 player 4 turn 
+let lastRound = false; //bool for last round of a game
 //if num === 0 a player tonked the round is over
 var winner; //winning player in string form
 
@@ -385,7 +386,12 @@ async function actionLogic(actionResponse) {
         await action();
     }
     if (actionResponse === 'tonk') {
-        currentPlayer = 0; //ends round
+        currentPlayer++;
+        lastRound = true;
+        //currentPlayer++;
+        for (var i = 0; i < numPlayers-1; i++) {
+            await turn();
+        }
         console.log("The game is over");
         await wait3s();
         console.log("The scores are...");
@@ -415,15 +421,17 @@ async function actionLogic(actionResponse) {
         await endTurn();
     }
 }//handles the logic for the action function
+async function turn() {
+    await displayUpdatedHand(); //displays hand
+    s = await action();
+    await actionLogic(s);
+}
 
 async function main() {
     let s;
     await startRound(); //makes cards and players and players' hands 
-    while (currentPlayer !== 0) {
-        //playerTurnStartAlert();
-        await displayUpdatedHand(); //displays hand
-        s = await action();
-        await actionLogic(s);
+    while (lastRound !== true) {
+        await turn();
     }
 
     rl.close();
