@@ -220,55 +220,13 @@ async function howManyPlayers() {
     }
     //console.log("Ok so there are " + numPlayers + " players");
 }//obtains and prints the number of players
-async function action() {
-    let actionResponse;
-    let promise1 = new Promise((resolve) => {
-        rl.question('What action would you like to take you can tonk or draw?\n', action1 => { resolve(action1) })
-    })
-    actionResponse = await promise1;
-    if (!(actionResponse === 'tonk' || actionResponse === 'draw')) {
-        console.log("");
-        console.log("Sorry that is an invalid response try again");
-        await action();
-    }
-    if (actionResponse === 'tonk') {
-        currentPlayer = 0; //ends round
-        console.log("The game is over");
-        await wait3s();
-        console.log("The scores are...");
-        await wait3s();
-        printScores();
-        setWinner();
-        await wait3s();
-        if (winner !== 'draw') {
-            console.log("The winner is " + winner);
-        } else {
-            console.log("It's a draw");
-        }
-    }
-    if (actionResponse === 'draw') {
-        drawACard();
-        console.log("");
-        await wait2s();
-        displayDrawnCard();
-        await whatCardToSwap();
-        await wait2s();//put this in to fix changing players too early may need tuning
-        if (currentPlayer !== allPlayers.length) {
-            currentPlayer++;
-        }// if not last player updates the current player after a turn by adding +1
-        else if (currentPlayer === allPlayers.length) {
-            currentPlayer = 1;
-        }
-        await endTurn();
-    }
-}//asks if you would like to tonk or draw  ***ACTION FUNCTION***
 async function whatCardToSwap() {
     let card;
     let promise1 = new Promise((resolve) => {
         rl.question('Which card in your hand would you like to swap with if any? type 1, 2, or 3, or type anything else to not swap cards \n', num => { resolve(num) })
     })
     card = await promise1;
-    if (card === 1 || card === 2 || card === 3) { 
+    if (card === '1' || card === '2' || card === '3') { 
     swapACard(playerTitles[currentPlayer - 1], card - 1);
     }//swaps the card if 1 2 or 3 else passes on the swap
     else {
@@ -411,16 +369,65 @@ function setWinner() {
     }//for two player game
 }//declares the winner
 
+//really important functions
+async function action() {
+    let actionResponse;
+    let promise1 = new Promise((resolve) => {
+        rl.question('What action would you like to take you can tonk or draw?\n', action1 => { resolve(action1) })
+    })
+    actionResponse = await promise1;
+    return actionResponse;
+}//asks if you would like to tonk or draw and returns the response  ***ACTION FUNCTION***
+async function actionLogic(actionResponse) {
+    if (!(actionResponse === 'tonk' || actionResponse === 'draw')) {
+        console.log("");
+        console.log("Sorry that is an invalid response try again");
+        await action();
+    }
+    if (actionResponse === 'tonk') {
+        currentPlayer = 0; //ends round
+        console.log("The game is over");
+        await wait3s();
+        console.log("The scores are...");
+        await wait3s();
+        printScores();
+        setWinner();
+        await wait3s();
+        if (winner !== 'draw') {
+            console.log("The winner is " + winner);
+        } else {
+            console.log("It's a draw");
+        }
+    }
+    if (actionResponse === 'draw') {
+        drawACard();
+        console.log("");
+        await wait2s();
+        displayDrawnCard();
+        await whatCardToSwap();
+        await wait2s();//put this in to fix changing players too early may need tuning
+        if (currentPlayer !== allPlayers.length) {
+            currentPlayer++;
+        }// if not last player updates the current player after a turn by adding +1
+        else if (currentPlayer === allPlayers.length) {
+            currentPlayer = 1;
+        }
+        await endTurn();
+    }
+}//handles the logic for the action function
+
 async function main() {
-    await startRound();
+    let s;
+    await startRound(); //makes cards and players and players' hands 
     while (currentPlayer !== 0) {
         //playerTurnStartAlert();
-        await displayUpdatedHand();
-        await action();
+        await displayUpdatedHand(); //displays hand
+        s = await action();
+        await actionLogic(s);
     }
 
     rl.close();
-}//method with everything
+}// runs the program
 //tester
 main();
 
